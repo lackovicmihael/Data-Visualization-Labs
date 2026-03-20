@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>VP-LV</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+
+<script>
+    const svg = d3.select("body")
+        .append("svg")
+        .attr("width", 800)
+        .attr("height", 500);
+
+    svg.append("rect")
+        .attr("x", 200)
+        .attr("y", 200)
+        .attr("width", 200)
+        .attr("height", 150)
+        .attr("fill", "lightblue");
+
+    svg.append("polygon")
+        .attr("points", "200,200 300,120 400,200")
+        .attr("fill", "brown");
+
+    svg.append("rect")
+        .attr("x", 280)
+        .attr("y", 260)
+        .attr("width", 40)
+        .attr("height", 90)
+        .attr("fill", "darkbrown");
+
+    svg.append("rect")
+        .attr("x", 220)
+        .attr("y", 230)
+        .attr("width", 40)
+        .attr("height", 40)
+        .attr("fill", "white");
+
+    svg.append("rect")
+        .attr("x", 340)
+        .attr("y", 230)
+        .attr("width", 40)
+        .attr("height", 40)
+        .attr("fill", "white");
+
+    svg.append("circle")
+        .attr("cx", 650)
+        .attr("cy", 80)
+        .attr("r", 40)
+        .attr("fill", "yellow");
+
+    svg.append("rect")
+        .attr("x", 0)
+        .attr("y", 350)
+        .attr("width", 800)
+        .attr("height", 150)
+        .attr("fill", "green");
+
+    svg.append("ellipse")
+        .attr("cx", 150)
+        .attr("cy", 80)
+        .attr("rx", 40)
+        .attr("ry", 20)
+        .attr("fill", "lightgray");
+
+    svg.append("ellipse")
+        .attr("cx", 180)
+        .attr("cy", 80)
+        .attr("rx", 40)
+        .attr("ry", 20)
+        .attr("fill", "lightgray");
+</script>
+
+</body>
+</html>

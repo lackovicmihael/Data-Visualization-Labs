@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>VP-LV</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+
+<script>
+    const data = [1,2,3,4,5,6,7,8,9,10];
+
+    const divs = d3.select("body")
+        .selectAll("div")
+        .data(data)
+        .enter()
+        .append("div");
+
+    divs.append("h2")
+        .text(d => "Podnaslov " + d);
+
+    divs.append("p")
+        .text(d => "Tekst " + d);
+</script>
+
+</body>
+</html>
