@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8">
+  <title>D3.js - Područja djelovanja udruga građana</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; background: #f8f9fa; }
+    h1, h2 { color: #222; }
+    svg { background: white; box-shadow: 0 2px 12px rgba(0,0,0,0.12); margin-bottom: 50px; }
+  </style>
+</head>
+<body>
+
+<h1 style="text-align:center;">Područja djelovanja udruga građana u Republici Hrvatskoj</h1>
+
+<h2>1. Stupčasti graf – Najčešća područja djelovanja (zadaci 2–4)</h2>
+<svg id="barChart" width="920" height="520"></svg>
+
+<h2>2. Linijski graf – Tri skupine područja (zadatak 5)</h2>
+<svg id="lineChart" width="920" height="520"></svg>
+
+<h2>3. Linijski graf s datumima (zadatak 6)</h2>
+<svg id="timeChart" width="920" height="520"></svg>
+
+<script>
+
+const barData = [
+  {"naziv": "3. Humanitarna", "vrijednost": 28},
+  {"naziv": "4. Socijalna", "vrijednost": 18},
+  {"naziv": "9. Obrazovanje, znanost i istraživanje", "vrijednost": 25},
+  {"naziv": "6. Kultura i umjetnost", "vrijednost": 22},
+  {"naziv": "11. Socijalna djelatnost", "vrijednost": 20},
+  {"naziv": "20. Ostale djelatnosti", "vrijednost": 19},
+  {"naziv": "15. Zaštita okoliša i prirode", "vrijednost": 12},
+  {"naziv": "14. Duhovna", "vrijednost": 15},
+  {"naziv": "8. Kulturna", "vrijednost": 10},
+  {"naziv": "7. Ljudska prava", "vrijednost": 11}
+];
+
+const lineData1 = [ // Skup 1 - Socijalna i humanitarna zaštita
+  {"godina": 2018, "vrijednost": 8},
+  {"godina": 2019, "vrijednost": 12},
+  {"godina": 2020, "vrijednost": 15},
+  {"godina": 2021, "vrijednost": 18},
+  {"godina": 2022, "vrijednost": 22},
+  {"godina": 2023, "vrijednost": 25},
+  {"godina": 2024, "vrijednost": 20}
+];
+
+const lineData2 = [ // Skup 2 - Kultura, obrazovanje i znanost
+  {"godina": 2018, "vrijednost": 10},
+  {"godina": 2019, "vrijednost": 14},
+  {"godina": 2020, "vrijednost": 11},
+  {"godina": 2021, "vrijednost": 16},
+  {"godina": 2022, "vrijednost": 19},
+  {"godina": 2023, "vrijednost": 17},
+  {"godina": 2024, "vrijednost": 21}
+];
+
+const lineData3 = [ // Skup 3 - Ostala područja (okoliš, ljudska prava, duhovnost...)
+  {"godina": 2018, "vrijednost": 6},
+  {"godina": 2019, "vrijednost": 9},
+  {"godina": 2020, "vrijednost": 8},
+  {"godina": 2021, "vrijednost": 12},
+  {"godina": 2022, "vrijednost": 14},
+  {"godina": 2023, "vrijednost": 13},
+  {"godina": 2024, "vrijednost": 15}
+];
+
+const timeData = [  // Generirani podaci s datumima (za zadatak 6)
+  {"datum": "2022-01-15", "vrijednost": 45},
+  {"datum": "2022-03-22", "vrijednost": 38},
+  {"datum": "2022-06-10", "vrijednost": 52},
+  {"datum": "2022-09-05", "vrijednost": 41},
+  {"datum": "2023-01-20", "vrijednost": 48},
+  {"datum": "2023-04-12", "vrijednost": 55},
+  {"datum": "2023-07-08", "vrijednost": 39},
+  {"datum": "2023-10-25", "vrijednost": 47},
+  {"datum": "2024-02-14", "vrijednost": 60},
+  {"datum": "2024-05-30", "vrijednost": 43},
+  {"datum": "2024-08-19", "vrijednost": 51},
+  {"datum": "2024-11-10", "vrijednost": 58}
+];
+
+const width = 800;
+const height = 400;
+const margin = {top: 30, right: 40, bottom: 140, left: 80};
+
+// ====================== STUPČASTI GRAF ======================
+const svgBar = d3.select("#barChart").attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+const xBar = d3.scaleBand().domain(barData.map(d => d.naziv)).range([0, width]).padding(0.3);
+const yBar = d3.scaleLinear().domain([0, d3.max(barData, d => d.vrijednost)]).range([height, 0]);
+
+const colorScale = d3.scaleOrdinal()
+  .domain(d3.range(10))
+  .range(["#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf"]);
+
+svgBar.selectAll("rect").data(barData).enter().append("rect")
+  .attr("x", d => xBar(d.naziv))
+  .attr("y", d => yBar(d.vrijednost))
+  .attr("width", xBar.bandwidth())
+  .attr("height", d => height - yBar(d.vrijednost))
+  .attr("fill", (d,i) => colorScale(i));
+
+svgBar.append("g").attr("transform", `translate(0,${height})`).call(d3.axisBottom(xBar))
+  .selectAll("text").attr("transform", "rotate(-45)").attr("text-anchor", "end").attr("dx", "-0.5em").attr("dy", "0.6em");
+
+svgBar.append("g").call(d3.axisLeft(yBar));
+
+svgBar.append("text").attr("x", width/2).attr("y", height + 115).attr("text-anchor", "middle").text("Područja djelovanja udruga");
+svgBar.append("text").attr("transform", "rotate(-90)").attr("x", -height/2).attr("y", -55).attr("text-anchor", "middle").text("Broj udruga / zapisa");
+
+// ====================== LINIJSKI GRAF TRI SKUPA ======================
+const svgLine = d3.select("#lineChart").attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+const xLine = d3.scaleLinear().domain([2018, 2024]).range([0, width]);
+const yLine = d3.scaleLinear().domain([0, 30]).range([height, 0]);
+
+const line = d3.line().x(d => xLine(d.godina)).y(d => yLine(d.vrijednost));
+
+svgLine.append("path").datum(lineData1).attr("fill","none").attr("stroke","#1f77b4").attr("stroke-width",3).attr("d", line);
+svgLine.append("path").datum(lineData2).attr("fill","none").attr("stroke","#ff7f0e").attr("stroke-width",3).attr("d", line);
+svgLine.append("path").datum(lineData3).attr("fill","none").attr("stroke","#2ca02c").attr("stroke-width",3).attr("d", line);
+
+// Legenda
+const leg = [{c:"#1f77b4", t:"Socijalna i humanitarna"}, {c:"#ff7f0e", t:"Kultura i obrazovanje"}, {c:"#2ca02c", t:"Ostala područja"}];
+leg.forEach((item,i) => {
+  svgLine.append("circle").attr("cx", width-160).attr("cy", 40+i*25).attr("r",6).attr("fill", item.c);
+  svgLine.append("text").attr("x", width-140).attr("y", 45+i*25).text(item.t).style("font-size","13px");
+});
+
+svgLine.append("g").attr("transform", `translate(0,${height})`).call(d3.axisBottom(xLine));
+svgLine.append("g").call(d3.axisLeft(yLine));
+
+svgLine.append("text").attr("x", width/2).attr("y", height+50).attr("text-anchor","middle").text("Godina");
+svgLine.append("text").attr("transform","rotate(-90)").attr("x", -height/2).attr("y", -55).attr("text-anchor","middle").text("Broj aktivnosti");
+
+// ====================== LINIJSKI GRAF S DATUMIMA ======================
+const svgTime = d3.select("#timeChart").attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+const parseDate = d3.timeParse("%Y-%m-%d");
+const xTime = d3.scaleTime().domain(d3.extent(timeData, d => parseDate(d.datum))).range([0, width]);
+const yTime = d3.scaleLinear().domain([0, d3.max(timeData, d => d.vrijednost)]).range([height, 0]);
+
+const lineTime = d3.line().x(d => xTime(parseDate(d.datum))).y(d => yTime(d.vrijednost));
+
+svgTime.append("path").datum(timeData).attr("fill","none").attr("stroke","#d62728").attr("stroke-width",3).attr("d", lineTime);
+
+svgTime.append("g").attr("transform", `translate(0,${height})`).call(d3.axisBottom(xTime));
+svgTime.append("g").call(d3.axisLeft(yTime));
+
+svgTime.append("text").attr("x", width/2).attr("y", height+50).attr("text-anchor","middle").text("Datum");
+svgTime.append("text").attr("transform","rotate(-90)").attr("x", -height/2).attr("y", -55).attr("text-anchor","middle").text("Broj zapisa");
+
+</script>
+</body>
+</html>
