@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://d3js.org/d3.v3.min.js"></script>
+</head>
+<body>
+
+<script>
+var widthSVG = 500;
+var heightSVG = 400;
+
+var rectW = 80;
+var rectH = 80;
+
+var svg = d3.select("body")
+    .append("svg")
+    .attr("width", widthSVG)
+    .attr("height", heightSVG);
+
+// početna pozicija (donji desni kut)
+var startX = widthSVG - rectW;
+var startY = heightSVG - rectH;
+
+var rect = svg.append("rect")
+    .attr("width", rectW)
+    .attr("height", rectH)
+    // transform se koristi umjesto x,y
+    .attr("transform", "translate("+startX+","+startY+")")
+    .style("fill","red");
+
+// prvo pomak po x osi
+rect.transition()
+    .duration(1000)
+    .attr("transform", "translate(0,"+startY+")")
+    // zatim po y osi
+    .transition()
+    .duration(1000)
+    .attr("transform", "translate(0,0)");
+
+</script>
+</body>
+</html>

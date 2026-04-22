@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://d3js.org/d3.v3.min.js"></script>
+</head>
+<body>
+
+<script>
+var widthSVG = 500;
+var heightSVG = 500;
+
+// kreiranje SVG-a
+var svg = d3.select("body")
+    .append("svg")
+    .attr("width", widthSVG)
+    .attr("height", heightSVG);
+
+var size = 100;
+
+// crtanje kvadrata
+var square = svg.append("rect")
+    .attr("x", 200)           // početna pozicija
+    .attr("y", 200)
+    .attr("width", size)
+    .attr("height", size)
+    .style("fill", "none")    // bez ispune
+    .style("stroke", "blue")  // obrub
+    .style("stroke-width", 3);
+
+// tranzicije
+square.transition()
+    .delay(3000)              // čekaj 3 sekunde
+    .duration(5000)           // trajanje ispune
+    .style("fill", "blue")    // dodavanje fill-a
+    .transition()
+    .duration(3000)
+    // povećanje kvadrata (centrirano)
+    .attr("x", widthSVG/4)
+    .attr("y", heightSVG/4)
+    .attr("width", widthSVG/2)
+    .attr("height", widthSVG/2)
+    .style("opacity", 0);     // postupno nestajanje
+
+</script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://d3js.org/d3.v3.min.js"></script>
+</head>
+<body>
+
+<script>
+var w = 600;
+var h = 400;
+
+var svg = d3.select("body")
+.append("svg")
+.attr("width", w)
+.attr("height", h);
+
+var types = ["rigid","elastic","liquid"];
+
+types.forEach(function(type,i){
+
+    let x = 100 + i*150;
+
+    // kugla
+    let ball = svg.append("circle")
+        .attr("cx", x)
+        .attr("cy", 50)
+        .attr("r", 15)
+        .style("fill","blue");
+
+    // podloga (materijal)
+    svg.append("rect")
+        .attr("x", x-30)
+        .attr("y", h-40)
+        .attr("width", 60)
+        .attr("height", 30)
+        .style("fill","gray");
+
+    fall(ball, type);
+});
+
+function fall(ball, type){
+
+    ball.transition()
+        .duration(1000)
+        .attr("cy", 340) // pad
+        .each("end", function(){
+
+            // različito ponašanje
+            if(type==="rigid") bounce(ball, 1);
+            if(type==="elastic") bounce(ball, 2);
+            // liquid → nema odbijanja
+        });
+}
+
+function bounce(ball, strength){
+
+    if(strength < 0.3) return; // zaustavljanje
+
+    ball.transition()
+        .duration(300/strength)
+        .attr("cy", 200) // gore
+        .transition()
+        .duration(300/strength)
+        .attr("cy", 340) // dolje
+        .each("end", function(){
+            bounce(ball, strength*0.6); // smanjuje se energija
+        });
+}
+
+</script>
+</body>
+</html>

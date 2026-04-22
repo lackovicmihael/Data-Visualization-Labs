@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://d3js.org/d3.v3.min.js"></script>
+</head>
+<body>
+
+<script>
+var widthSVG = 600;
+var heightSVG = 400;
+
+var svg = d3.select("body")
+    .append("svg")
+    .attr("width", widthSVG)
+    .attr("height", heightSVG);
+
+// random funkcija
+function rand(min,max){
+    return Math.random()*(max-min)+min;
+}
+
+function start(){
+
+    svg.selectAll("*").remove(); // očisti prethodne kvadrate
+
+    var counter = 0; // broji završene animacije
+
+    for(let i=0;i<10;i++){
+
+        let size = rand(30,80);
+        let d1 = rand(1000,3000); // trajanje 1. tranzicije
+        let d2 = rand(1000,3000); // trajanje 2. tranzicije
+
+        let rect = svg.append("rect")
+            .attr("x", rand(0,widthSVG-80)) // random pozicija
+            .attr("y", rand(0,heightSVG-80))
+            .attr("width", size)
+            .attr("height", size)
+            .style("fill","none")
+            .style("stroke","black");
+
+        rect.transition()
+            .duration(d1)
+            .style("fill","green") // ispunjavanje
+            .transition()
+            .duration(d2)
+            .attr("width", widthSVG/2)
+            .attr("height", widthSVG/2)
+            .style("opacity",0) // nestajanje
+            .each("end", function(){ // kada završi
+                counter++;
+                if(counter===10){
+                    start(); // ponovi cijeli proces
+                }
+            });
+    }
+}
+
+start();
+
+</script>
+</body>
+</html>

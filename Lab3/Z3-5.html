@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://d3js.org/d3.v3.min.js"></script>
+</head>
+<body>
+
+<script>
+var w = 600;
+var h = 600;
+
+var svg = d3.select("body")
+.append("svg")
+.attr("width", w)
+.attr("height", h);
+
+// sunce (centar)
+svg.append("circle")
+    .attr("cx", w/2)
+    .attr("cy", h/2)
+    .attr("r", 30)
+    .style("fill","orange");
+
+// podaci za planete
+var planets = [
+    {r:80, speed:2},
+    {r:140, speed:1},
+    {r:200, speed:0.5}
+];
+
+planets.forEach(function(p){
+
+    let g = svg.append("g"); // grupa za rotaciju
+
+    g.append("circle")
+        .attr("r",10)
+        .style("fill","blue");
+
+    function rotate(){
+        g.transition()
+        .duration(10000/p.speed)
+        .attrTween("transform", function(){
+            return function(t){
+                // kombinacija transformacija:
+                // 1. centar
+                // 2. rotacija
+                // 3. udaljenost od centra
+                return "translate("+w/2+","+h/2+") rotate("+(360*t)+") translate("+p.r+",0)";
+            }
+        })
+        .each("end", rotate); // ponavljanje
+    }
+
+    rotate();
+});
+
+</script>
+</body>
+</html>
