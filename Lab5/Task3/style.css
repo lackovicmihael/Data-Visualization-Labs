@@ -1,0 +1,12 @@
+#info {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: white;
+    padding: 8px;
+    border: 1px solid black;
+}
+
+path {
+    stroke: black;
+}

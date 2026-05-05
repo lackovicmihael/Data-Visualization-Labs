@@ -1,0 +1,18 @@
+body {
+    font-family: Arial;
+}
+
+#info {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 8px;
+    background: white;
+    border: 1px solid black;
+    pointer-events: none;
+}
+
+path {
+    fill: #ccc;
+    stroke: black;
+}
